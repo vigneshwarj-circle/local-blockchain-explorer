@@ -53,7 +53,7 @@
     "web-vitals": "^3.5.2"
   },
   "scripts": {
-    "start": "vite",
+    "start": "node scripts/start-with-args.js",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "jest",

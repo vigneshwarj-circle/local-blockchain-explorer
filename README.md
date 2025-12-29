@@ -4,6 +4,28 @@ An open-source, fast, local, laptop-friendly Ethereum block explorer.
 
 https://user-images.githubusercontent.com/28685/124196700-4fe71200-daa3-11eb-912c-b66494fe4b23.mov
 
+## Quick Start
+
+To start the development server with your own RPC endpoint:
+
+```bash
+npm run start -- --rpc http://localhost:8545
+```
+
+Replace `http://localhost:8545` with your Erigon or Ethereum RPC URL (e.g., local node, fork, or remote endpoint).
+
+**Additional options:**
+
+```bash
+# With Beacon API
+npm run start -- --rpc http://localhost:8545 --beacon-api http://localhost:5052
+
+# With custom assets URL
+npm run start -- --rpc http://localhost:8545 --assets-url http://localhost:5175
+```
+
+> **Note:** The double dash (`--`) after `npm run start` is required to pass arguments to the script.
+
 ## Documentation
 
 > 💡 For install instructions and a lot more, please take a look at our official documentation: [The Otterscan Book](https://docs.otterscan.io/)!

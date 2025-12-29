@@ -8,10 +8,18 @@ import { Match, MatchType } from "../../../sourcify/useSourcify";
 import { usePageTitle } from "../../../useTitle";
 import WhatsabiWarning from "../WhatsabiWarning";
 import ReadFunction from "./ReadFunction";
+import myAbi from "../../../abi/myabi.json";
 
 type ContractsProps = {
   checksummedAddress: string;
   match: Match | null | undefined;
+};
+
+// Map of specific contract addresses to custom ABIs that should be used for the
+// "Read Contract" UI. Keys must be checksummed addresses.
+const CUSTOM_READ_ABIS: Record<string, any[]> = {
+  // Example (replace with your contract address):
+  "0x7FB8c7260b63934d8da38aF902f87ae6e284a845": myAbi,
 };
 
 export function isReadFunction(abiFn: {
@@ -28,16 +36,33 @@ const ReadContract: React.FC<ContractsProps> = ({
   checksummedAddress,
   match,
 }) => {
+  const customAbi = CUSTOM_READ_ABIS[checksummedAddress];
+  const effectiveMatch: Match | null | undefined = customAbi
+    ? {
+        type: MatchType.FULL_MATCH,
+        metadata: {
+          version: "custom",
+          language: "Solidity",
+          compiler: { version: "custom" },
+          sources: {},
+          output: {
+            abi: customAbi,
+          },
+        },
+      }
+    : match;
+
   const [showNonViewReturns, setShowNonViewReturns] = useState<boolean>(false);
   usePageTitle(`Read Contract | ${checksummedAddress}`);
 
-  const viewFunctions = match?.metadata.output.abi.filter((fn) =>
+  const viewFunctions = effectiveMatch?.metadata.output.abi.filter((fn) =>
     isReadFunction(fn),
   );
-  const nonViewReturns = match?.metadata.output.abi.filter(
+  const nonViewReturns = effectiveMatch?.metadata.output.abi.filter(
     (fn) => fn.outputs && fn.outputs.length > 0 && !isReadFunction(fn),
   );
-  const showDecodedOutputs = match?.type !== MatchType.WHATSABI_GUESS;
+  const showDecodedOutputs =
+    effectiveMatch?.type !== MatchType.WHATSABI_GUESS;
 
   const location = useLocation();
   useEffect(() => {
@@ -52,19 +77,19 @@ const ReadContract: React.FC<ContractsProps> = ({
         }
       }
     }, 200);
-  }, [match]);
+  }, [effectiveMatch, location.hash]);
 
   return (
     <StandardSelectionBoundary>
       <ContentFrame tabs>
-        {match && match.type === MatchType.WHATSABI_GUESS && (
+        {effectiveMatch && effectiveMatch.type === MatchType.WHATSABI_GUESS && (
           <WhatsabiWarning />
         )}
         <div className="py-5">
-          {match === undefined && (
+          {effectiveMatch === undefined && (
             <span>Getting data from Sourcify repository...</span>
           )}
-          {match === null && (
+          {effectiveMatch === null && (
             <span>
               Address is not a contract or couldn't find contract metadata in
               Sourcify repository.
@@ -83,7 +108,7 @@ const ReadContract: React.FC<ContractsProps> = ({
                       func={FunctionFragment.from(fn)}
                       address={checksummedAddress}
                       devMethod={
-                        match?.metadata?.output?.devdoc?.methods?.[
+                        effectiveMatch?.metadata?.output?.devdoc?.methods?.[
                           FunctionFragment.from(fn).format("sighash")
                         ]
                       }
@@ -107,7 +132,7 @@ const ReadContract: React.FC<ContractsProps> = ({
                               func={FunctionFragment.from(fn)}
                               address={checksummedAddress}
                               devMethod={
-                                match?.metadata?.output?.devdoc?.methods?.[
+                                effectiveMatch?.metadata?.output?.devdoc?.methods?.[
                                   FunctionFragment.from(fn).format("sighash")
                                 ]
                               }
