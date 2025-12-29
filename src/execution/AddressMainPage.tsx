@@ -171,11 +171,18 @@ const AddressMainPage: React.FC = () => {
                       </span>
                     </NavTab>
                     {(match || whatsabiMatch) && (
-                      <NavTab href={`/address/${addressOrName}/readContract`}>
-                        <span className={`flex items-baseline space-x-2`}>
-                          <span>Read Contract</span>
-                        </span>
-                      </NavTab>
+                      <>
+                        <NavTab href={`/address/${addressOrName}/readContract`}>
+                          <span className={`flex items-baseline space-x-2`}>
+                            <span>Read Contract</span>
+                          </span>
+                        </NavTab>
+                        <NavTab href={`/address/${addressOrName}/writeContract`}>
+                          <span className={`flex items-baseline space-x-2`}>
+                            <span>Write Contract</span>
+                          </span>
+                        </NavTab>
+                      </>
                     )}
                   </>
                 )}

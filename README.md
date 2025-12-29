@@ -1,9 +1,3 @@
-# Otterscan
-
-An open-source, fast, local, laptop-friendly Ethereum block explorer.
-
-https://user-images.githubusercontent.com/28685/124196700-4fe71200-daa3-11eb-912c-b66494fe4b23.mov
-
 ## Quick Start
 
 To start the development server with your own RPC endpoint:
@@ -25,6 +19,12 @@ npm run start -- --rpc http://localhost:8545 --assets-url http://localhost:5175
 ```
 
 > **Note:** The double dash (`--`) after `npm run start` is required to pass arguments to the script.
+
+# Otterscan
+
+An open-source, fast, local, laptop-friendly Ethereum block explorer.
+
+https://user-images.githubusercontent.com/28685/124196700-4fe71200-daa3-11eb-912c-b66494fe4b23.mov
 
 ## Documentation
 

@@ -41,7 +41,7 @@ export function prepareArgument(arg: string, argType: ParamType) {
   return finalArg;
 }
 
-function validateArgument(arg: any, argType: ParamType) {
+export function validateArgument(arg: any, argType: ParamType) {
   // Check only those types which ethers might parse incorrectly
   if (
     (argType.baseType === "string" || argType.baseType === "address") &&
@@ -74,7 +74,7 @@ function validateArgument(arg: any, argType: ParamType) {
   }
 }
 
-async function transformArgument(
+export async function transformArgument(
   arg: any,
   argType: ParamType,
   provider: JsonRpcApiProvider,
@@ -98,7 +98,7 @@ async function transformArgument(
   return arg;
 }
 
-async function parseStructuredArgument(
+export async function parseStructuredArgument(
   arg: ParamValue,
   argType: ParamType,
   argIndex: number,

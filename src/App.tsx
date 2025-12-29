@@ -36,6 +36,7 @@ import { ChainInfoContext, populateChainInfo } from "./useChainInfo";
 import { loadOtterscanConfig, OtterscanConfig } from "./useConfig";
 import { getBalanceQuery, getCodeQuery, hasCodeQuery } from "./useErigonHooks";
 import { createRuntime, RuntimeContext } from "./useRuntime";
+import { WalletProvider } from "./useWallet";
 import WarningHeader from "./WarningHeader";
 
 const Block = lazy(() => import("./execution/Block"));
@@ -55,6 +56,9 @@ const AddressKlerosInfo = lazy(
 );
 const AddressReadContract = lazy(
   () => import("./execution/address/AddressReadContract"),
+);
+const AddressWriteContract = lazy(
+  () => import("./execution/address/AddressWriteContract"),
 );
 const AddressERC20Results = lazy(
   () => import("./execution/address/AddressERC20Results"),
@@ -334,6 +338,7 @@ const router = createBrowserRouter(
           />
           <Route path="kleros" element={<AddressKlerosInfo />} />
           <Route path="readContract" element={<AddressReadContract />} />
+          <Route path="writeContract" element={<AddressWriteContract />} />
           <Route
             path="proxyLogicContract"
             element={<ProxyContract />}
@@ -380,6 +385,10 @@ const router = createBrowserRouter(
   ),
 );
 
-const App = () => <RouterProvider router={router} />;
+const App = () => (
+  <WalletProvider>
+    <RouterProvider router={router} />
+  </WalletProvider>
+);
 
 export default App;
