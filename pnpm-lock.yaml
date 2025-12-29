@@ -141,8 +141,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       web-vitals:
-        specifier: ^3.5.2
-        version: 3.5.2
+        specifier: ^5.1.0
+        version: 5.1.0
     devDependencies:
       '@jest/globals':
         specifier: ^30.1.2
@@ -758,6 +758,7 @@ packages:
 
   '@fortawesome/react-fontawesome@0.2.2':
     resolution: {integrity: sha512-EnkrprPNqI6SXJl//m29hpaNzOp1bruISWaOiRtkMi/xSvHJlzc2j2JAYS7egxt/EbjSNV/k6Xy0AQI6vB2+1g==}
+    deprecated: v0.2.x is no longer supported. Unless you are still using FontAwesome 5, please update to v3.1.1 or greater.
     peerDependencies:
       '@fortawesome/fontawesome-svg-core': ~1 || ~6
       react: '>=16.3'
@@ -4254,8 +4255,8 @@ packages:
   web-solc@0.7.0:
     resolution: {integrity: sha512-FUl5lEAioGGqRznl+uupes2LxBrVVjdJIYJW2E79woDA7RVZKfsZvdqMDjU2wTfStk9jTCaKXaX2zrBmzFVb9w==}
 
-  web-vitals@3.5.2:
-    resolution: {integrity: sha512-c0rhqNcHXRkY/ogGDJQxZ9Im9D19hDihbzSQJrsioex+KnFgmMzBiy57Z1EjkhX/+OjyBpclDCzz2ITtjokFmg==}
+  web-vitals@5.1.0:
+    resolution: {integrity: sha512-ArI3kx5jI0atlTtmV0fWU3fjpLmq/nD3Zr1iFFlJLaqa5wLBkUSzINwBPySCX/8jRyjlmy1Volw1kz1g9XE4Jg==}
 
   webpack-virtual-modules@0.6.2:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
@@ -8826,7 +8827,7 @@ snapshots:
     dependencies:
       semver: 7.7.2
 
-  web-vitals@3.5.2: {}
+  web-vitals@5.1.0: {}
 
   webpack-virtual-modules@0.6.2: {}
 
