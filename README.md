@@ -1,24 +1,29 @@
 ## Quick Start
 
-To start the development server with your own RPC endpoint:
+Start the development server:
 
 ```bash
-npm run start -- --rpc http://localhost:8545
+npm start
 ```
 
-Replace `http://localhost:8545` with your Erigon or Ethereum RPC URL (e.g., local node, fork, or remote endpoint).
+When you first open the app, you'll be prompted to configure your RPC endpoint. You can also manage multiple RPC endpoints directly from the UI:
 
-**Additional options:**
+### Managing RPC Endpoints
 
-```bash
-# With Beacon API
-npm run start -- --rpc http://localhost:8545 --beacon-api http://localhost:5052
+**From the Header (any page):**
 
-# With custom assets URL
-npm run start -- --rpc http://localhost:8545 --assets-url http://localhost:5175
-```
+Click the RPC selector dropdown in the top-right corner to:
+- Switch between saved endpoints
+- Add new RPC endpoints
+- Edit or delete existing endpoints
 
-> **Note:** The double dash (`--`) after `npm run start` is required to pass arguments to the script.
+<img src="docs/screenshots/rpc-selector.png" width="400" alt="RPC Selector Dropdown" />
+
+**From the Home Page:**
+
+Manage all your RPC endpoints with detailed information and quick actions.
+
+<img src="docs/screenshots/rpc-modal.png" width="500" alt="Edit RPC Endpoint Modal" />
 
 # Otterscan
 
