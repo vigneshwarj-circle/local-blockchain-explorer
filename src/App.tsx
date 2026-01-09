@@ -1,6 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { isAddress } from "ethers";
-import { FC, lazy, Suspense, useMemo, useState } from "react";
+import { FC, lazy, Suspense, useMemo, useState, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import {
   Await,
@@ -38,6 +38,8 @@ import { getBalanceQuery, getCodeQuery, hasCodeQuery } from "./useErigonHooks";
 import { createRuntime, RuntimeContext } from "./useRuntime";
 import { WalletProvider } from "./useWallet";
 import WarningHeader from "./WarningHeader";
+import RPCConfigModal from "./rpc/RPCConfigModal";
+import { hasAnyRPCConfig } from "./rpc/useRPCManager";
 
 const Block = lazy(() => import("./execution/Block"));
 const BlockTransactions = lazy(() => import("./execution/BlockTransactions"));
@@ -222,12 +224,57 @@ const Layout: FC = () => {
 
   const [sourcifySource, setSourcifySource] =
     useState<SourcifySourceName | null>(null);
+  const [showInitialSetup, setShowInitialSetup] = useState(false);
+  const [hasCheckedConfig, setHasCheckedConfig] = useState(false);
+
   const appConfig = useMemo((): AppConfig => {
     return {
       sourcifySource,
       setSourcifySource,
     };
   }, [sourcifySource, setSourcifySource]);
+
+  // Check if RPC config exists on mount
+  useEffect(() => {
+    const hasConfig = hasAnyRPCConfig();
+    setShowInitialSetup(!hasConfig);
+    setHasCheckedConfig(true);
+  }, []);
+
+  const handleInitialSetup = async (name: string, url: string) => {
+    // Dynamically import to avoid circular dependency
+    const { default: rpcManager } = await import("./rpc/useRPCManager");
+    const storage = localStorage.getItem("otterscan_rpc_configs");
+    const parsed = storage ? JSON.parse(storage) : { configs: [], activeId: null };
+    
+    const newConfig = {
+      id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+      name,
+      url,
+      createdAt: Date.now(),
+    };
+    
+    parsed.configs.push(newConfig);
+    parsed.activeId = newConfig.id;
+    localStorage.setItem("otterscan_rpc_configs", JSON.stringify(parsed));
+    
+    // Reload the page to apply the new config
+    window.location.reload();
+  };
+
+  // Show modal if no config exists
+  if (!hasCheckedConfig) {
+    return null; // Wait for config check
+  }
+
+  if (showInitialSetup) {
+    return (
+      <RPCConfigModal
+        onSave={handleInitialSetup}
+        showCancel={false}
+      />
+    );
+  }
 
   return (
     // Catch all error boundary

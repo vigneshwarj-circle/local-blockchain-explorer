@@ -12,6 +12,7 @@ import { useLatestBlockHeader } from "./useLatestBlock";
 import { RuntimeContext } from "./useRuntime";
 import { usePageTitle } from "./useTitle";
 import { commify } from "./utils/utils";
+import RPCManagerSection from "./rpc/RPCManagerSection";
 
 const CameraScanner = lazy(() => import("./search/CameraScanner"));
 
@@ -75,6 +76,7 @@ const Home: FC = () => {
             Search
           </button>
         </form>
+        <RPCManagerSection />
         {!(config.branding?.hideAnnouncements ?? false) &&
           config.experimental && (
             <NavLink

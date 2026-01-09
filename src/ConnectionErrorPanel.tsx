@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FC, PropsWithChildren, memo } from "react";
 import { ConnectionStatus } from "./types";
+import RPCSelector from "./rpc/RPCSelector";
 
 type ConnectionErrorPanelProps = {
   connStatus: ConnectionStatus;
@@ -18,7 +19,10 @@ const ConnectionErrorPanel: FC<ConnectionErrorPanelProps> = ({
 }) => {
   return (
     <div className="flex h-screen flex-col bg-gray-300 font-sans">
-      <div className="min-w-lg m-auto h-60 max-w-lg text-lg text-gray-700">
+      <div className="flex justify-end p-4">
+        <RPCSelector />
+      </div>
+      <div className="min-w-lg m-auto max-w-lg text-lg text-gray-700">
         <Step type="wait" msg="Trying to connect to Erigon node..." />
         <div className="flex space-x-2">
           <span className="ml-7 text-base">{nodeURL}</span>

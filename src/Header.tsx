@@ -6,6 +6,7 @@ import PriceBox from "./PriceBox";
 import SourcifyMenu from "./SourcifyMenu";
 import { useGenericSearch } from "./search/search";
 import { RuntimeContext } from "./useRuntime";
+import RPCSelector from "./rpc/RPCSelector";
 // @ts-expect-error
 import Otter from "./otter.png?w=128&h=128&webp";
 
@@ -83,6 +84,9 @@ const Header: FC = () => {
               Search
             </button>
           </form>
+          <div className="hidden sm:inline self-stretch">
+            <RPCSelector />
+          </div>
           <div className="hidden sm:inline self-stretch">
             <SourcifyMenu />
           </div>

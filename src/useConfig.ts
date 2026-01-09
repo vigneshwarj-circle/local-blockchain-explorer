@@ -265,12 +265,19 @@ export const DEFAULT_CONFIG_FILE = "/config.json";
 /**
  * Loads the global configuration according to the following criteria:
  *
+ * - Check localStorage for user-configured RPC URL (highest priority)
  * - if the entire JSON is informed via VITE_CONFIG_JSON env variable, use it
  * - otherwise fetch the JSON from default config URL
  * - if fetching the JSON, allows to override some keys using VITE_ env variables
  */
 export const loadOtterscanConfig = async (): Promise<OtterscanConfig> => {
-  // vite config override has precedence over everything
+  // Import the RPC config getter
+  const { getActiveRPCConfig } = await import("./rpc/useRPCManager");
+  
+  // Check localStorage for user-configured RPC first
+  const activeRPCConfig = getActiveRPCConfig();
+
+  // vite config override has precedence over everything except localStorage
   if (import.meta.env.VITE_CONFIG_JSON !== undefined) {
     console.log("Using hardcoded config: ");
     console.log(import.meta.env.VITE_CONFIG_JSON);
@@ -278,7 +285,15 @@ export const loadOtterscanConfig = async (): Promise<OtterscanConfig> => {
     // We trust the contents of VITE_CONFIG_JSON to be a valid
     // Otterscan JSON configuration
     try {
-      return JSON.parse(import.meta.env.VITE_CONFIG_JSON);
+      const config = JSON.parse(import.meta.env.VITE_CONFIG_JSON);
+      
+      // Override with localStorage RPC if present
+      if (activeRPCConfig) {
+        console.log("Overriding erigonURL with localStorage config:", activeRPCConfig.url);
+        config.erigonURL = activeRPCConfig.url;
+      }
+      
+      return config;
     } catch (err) {
       throw new Error("Error while reading config file", { cause: err });
     }
@@ -293,7 +308,12 @@ export const loadOtterscanConfig = async (): Promise<OtterscanConfig> => {
 
     // Override config for local dev
     const config: OtterscanConfig = { ...data };
-    if (import.meta.env.DEV) {
+    
+    // Priority: localStorage > VITE_ERIGON_URL > config.json
+    if (activeRPCConfig) {
+      console.log("Using RPC from localStorage:", activeRPCConfig.url);
+      config.erigonURL = activeRPCConfig.url;
+    } else if (import.meta.env.DEV) {
       config.erigonURL = import.meta.env.VITE_ERIGON_URL ?? config.erigonURL;
       config.beaconAPI =
         import.meta.env.VITE_BEACON_API_URL ?? config.beaconAPI;
